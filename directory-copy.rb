@@ -36,9 +36,9 @@ def print_header
   puts "-------------"
 end
 def print(students)
-    students.each do |student|
-        puts "#{student[:name]} (#{student[:cohort]} cohort)"
-    end
+  students.each do |student|
+    puts "#{student[:name]} (#{student[:cohort]} cohort)"
+  end
 end
 def print_footer(students)
   if students.count == 1
