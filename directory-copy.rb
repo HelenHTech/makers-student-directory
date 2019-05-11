@@ -1,33 +1,33 @@
-# first we print the list of students
 students = [
-  {name: "Dr. Hannibal Lecter", cohort: :november},
-  {name: "Darth Vader", cohort: :november},
-  {name: "Nurse Ratched", cohort: :november},
-  {name: "Michael Corleone", cohort: :november},
-  {name: "Alex DeLarge", cohort: :november},
-  {name: "The Wicked Witch of the West", cohort: :november},
-  {name: "Terminator", cohort: :november},
-  {name: "Freddy Krueger", cohort: :november},
-  {name: "The Joker", cohort: :november},
-  {name: "Joffrey Baratheon", cohort: :november},
-  {name: "Norman Bates", cohort: :november}
+  {name: "Dr. Hannibal Lecter", cohort: :november, hobby: :running },
+  {name: "Darth Vader", cohort: :november, hobby: :music },
+  {name: "Nurse Ratched", cohort: :november, hobby: :running },
+  {name: "Michael Corleone", cohort: :november, hobby: :music },
+  {name: "Alex DeLarge", cohort: :october, hobby: :music },
+  {name: "The Wicked Witch of the West", cohort: :november },
+  {name: "Terminator", cohort: :november, hobby: :running },
+  {name: "Freddy Krueger", cohort: :november, hobby: :singing },
+  {name: "The Joker", cohort: :november, hobby: :music },
+  {name: "Joffrey Baratheon", cohort: :october, hobby: :singing },
+  {name: "Norman Bates", cohort: :october, hobby: :running }
 ]
 def input_students
-  puts "Please enter the names of the students"
-  puts "To finish, just hit return twice"
-  # create an empty array
+  puts "Please enter the names of the students, along with the cohort"
+  puts "To finish, please enter stop"
   students = []
-  # get the first name
   name = gets.chomp
-  # while the name is not empty, repeat this code
-  while !name.empty? do
-    # add the student hash to the array
-    students << {name: name, cohort: :november}
+  cohort = gets.chomp
+  while name != "stop" do
+    students << {name: name.center(10), cohort: cohort }
     puts "Now we have #{students.count} students"
-    # get another name from the user
     name = gets.chomp
+    cohort = gets.chomp
+    if name.empty?
+      name = "No name given"
+    elsif name == "stop" || cohort == "stop"
+      break
+    end
   end
-  # return the array of students
   students
 end
 
@@ -36,17 +36,18 @@ def print_header
   puts "-------------"
 end
 def print(students)
-  students.each.with_index do |student,index|
-    if student[:name].length < 12
-      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+    students.each do |student|
+        puts "#{student[:name]} (#{student[:cohort]} cohort)"
     end
-  end
 end
 def print_footer(students)
-  puts "Overall, we have #{students.count} great students"
+  if students.count == 1
+    puts "Overall, we have #{students.count} great student"
+  elsif students.count > 1
+    puts "Overall, we have #{students.count} great students"
+  end
 end
 students = input_students
-# nothing happens until we call the methods
 print_header
 print(students)
 print_footer(students)
