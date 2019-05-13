@@ -1,3 +1,5 @@
+require 'csv'
+
 @students = []
 def print_menu
   puts "1. Input the students"
@@ -23,8 +25,10 @@ def process(selection)
     when "3"
       save_students
     when "4"
+      puts "Which file would you like to load the list of students from"
       load_students
     when "9"
+      puts "Goodbye"
       exit
     else
       puts "I don't know what you meant, try again"
@@ -35,10 +39,12 @@ def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
   name = STDIN.gets.chomp
+  cohort = STDIN.gets.chomp
   while !name.empty? do
-    @students << {name: name, cohort: :november}
+    add_students_to_array(name, cohort)
     puts "Now we have #{@students.count} students"
     name = STDIN.gets.chomp
+    cohort = STDIN.gets.chomp
   end
 end
 
@@ -68,34 +74,41 @@ def print_footer
 end
 
 def save_students
-  file = File.open("students.csv", "w")
-  @students.each do |student|
-    student_data = [student[:name], student[:cohort]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
+  puts "Which file would you like to save the list of students to"
+  File.open(filename = gets.chomp, "w") do |file|
+    @students.each do |student|
+      student_data = [student[:name], student[:cohort]]
+      csv_line = student_data.join(",")
+      file.puts csv_line
+    end
   end
-  file.close
+  puts "List of students saved to students.csv"
 end
 
-def load_students(filename = "students.csv")
-  file = File.open(filename, "r")
-  file.readlines.each do |line|
-  name, cohort = line.chomp.split(',')
-    @students << {name: name, cohort: cohort.to_sym}
+def load_students(filename = gets.chomp)
+  File.open(filename, "r") do |file|
+    file.readlines.each do |line|
+      name, cohort = line.chomp.split(',')
+    add_students_to_array(name, cohort)
+    end
   end
-  file.close
+  puts "List of students loaded from students.csv"
 end
 
 def try_load_students
-  filename = ARGV.first # first argument from the command line
-  return if filename.nil? # get out of the method if it isn't given
-  if File.exists?(filename) # if it exists
+  filename = ARGV.first
+  return if filename.nil?
+  if File.exists?(filename)
     load_students(filename)
      puts "Loaded #{@students.count} from #{filename}"
-  else # if it doesn't exist
+  else
     puts "Sorry, #{filename} doesn't exist."
-    exit # quit the program
+    exit
   end
+end
+
+def add_students_to_array(name, cohort)
+  @students << {name: name, cohort: cohort.to_sym}
 end
 
 try_load_students
