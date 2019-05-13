@@ -75,11 +75,10 @@ end
 
 def save_students
   puts "Which file would you like to save the list of students to"
-  File.open(filename = gets.chomp, "w") do |file|
+  CSV.open(filename = gets.chomp, "w") do |file|
     @students.each do |student|
       student_data = [student[:name], student[:cohort]]
-      csv_line = student_data.join(",")
-      file.puts csv_line
+      file << student_data
     end
   end
   puts "List of students saved to students.csv"
@@ -98,7 +97,7 @@ end
 def try_load_students
   filename = ARGV.first
   return if filename.nil?
-  if File.exists?(filename)
+  if CSV.exists?(filename)
     load_students(filename)
      puts "Loaded #{@students.count} from #{filename}"
   else
