@@ -85,11 +85,9 @@ def save_students
 end
 
 def load_students(filename = gets.chomp)
-  File.open(filename, "r") do |file|
-    file.readlines.each do |line|
-      name, cohort = line.chomp.split(',')
+  CSV.foreach(filename) do |line|
+      name, cohort = line
     add_students_to_array(name, cohort)
-    end
   end
   puts "List of students loaded from students.csv"
 end
